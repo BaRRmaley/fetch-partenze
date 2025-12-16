@@ -3,10 +3,15 @@ const puppeteer = require('puppeteer');
 
 (async () => {
   const station = process.argv[2] || 'S00219';
-  // Compute today's date in Italy (Europe/Rome)
+// Compute today's date in Italy (Europe/Rome)
 const now = new Date();
 const italy = new Date(now.toLocaleString("en-US", { timeZone: "Europe/Rome" }));
-const today = italy.toISOString().slice(0,10).replace(/-/g,'');
+
+const year = italy.getFullYear();
+const month = String(italy.getMonth() + 1).padStart(2, "0");
+const day = String(italy.getDate()).padStart(2, "0");
+
+const today = `${year}${month}${day}`;
 
   const url = `https://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/partenze/${station}/${today}`;
 
