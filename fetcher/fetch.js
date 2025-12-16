@@ -3,7 +3,11 @@ const puppeteer = require('puppeteer');
 
 (async () => {
   const station = process.argv[2] || 'S00219';
-  const today = new Date().toISOString().slice(0,10).replace(/-/g,'');
+  // Compute today's date in Italy (Europe/Rome)
+const now = new Date();
+const italy = new Date(now.toLocaleString("en-US", { timeZone: "Europe/Rome" }));
+const today = italy.toISOString().slice(0,10).replace(/-/g,'');
+
   const url = `https://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/partenze/${station}/${today}`;
 
   const browser = await puppeteer.launch({
