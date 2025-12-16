@@ -11,7 +11,7 @@ const year = italy.getFullYear();
 const month = String(italy.getMonth() + 1).padStart(2, "0");
 const day = String(italy.getDate()).padStart(2, "0");
 
-const today = `${year}${month}${String(day - 1).padStart(2, "0")}`;
+const today = `${year}${month}${day}`;
 
   const url = `https://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/partenze/${station}/${today}`;
 
