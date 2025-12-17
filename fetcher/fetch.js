@@ -1,5 +1,4 @@
 const fs = require("fs");
-const fetch = require("node-fetch");
 
 // Compute YYYYMMDD in Italy timezone
 function italyDate(offsetDays = 0) {
@@ -16,7 +15,7 @@ function italyDate(offsetDays = 0) {
   return `${y}${m}${d}`;
 }
 
-// Fetch departures for a given station + date
+// Fetch departures for a given station + date, using Node 18+ global fetch
 async function fetchDepartures(station, date) {
   const url = `https://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/partenze/${station}/${date}`;
 
