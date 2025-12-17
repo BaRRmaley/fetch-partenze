@@ -1,27 +1,26 @@
 const fs = require("fs");
 
-// Compute YYYYMMDD in Italy timezone
-function italyDate(offsetDays = 0) {
+// Build a JS Date string in Italy timezone, formatted exactly as ViaggiaTreno expects
+function italyDateString(offsetDays = 0) {
   const now = new Date();
-  const italy = new Date(
-    now.toLocaleString("en-US", { timeZone: "Europe/Rome" })
-  );
+  const italy = new Date(now.toLocaleString("en-US", { timeZone: "Europe/Rome" }));
   italy.setDate(italy.getDate() + offsetDays);
 
-  const y = italy.getFullYear();
-  const m = String(italy.getMonth() + 1).padStart(2, "0");
-  const d = String(italy.getDate()).padStart(2, "0");
-
-  return `${y}${m}${d}`;
+  // ViaggiaTreno accepts the JS Date string WITHOUT the timezone name in parentheses
+  return italy.toString().replace(/\s*\(.*\)$/, "");
 }
 
-// Fetch departures for a given station + date, using Node 18+ global fetch
-async function fetchDepartures(station, date) {
-  const url = `https://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/partenze/${station}/${date}`;
+// Fetch departures using the correct date format
+async function fetchDepartures(station, dateString) {
+  const url = `https://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno/partenze/${station}/${dateString}`;
 
   try {
     const r = await fetch(url, {
-      headers: { "X-Requested-With": "XMLHttpRequest" }
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "User-Agent": "Mozilla/5.0",
+        "Accept": "application/json"
+      }
     });
 
     const text = await r.text();
@@ -53,7 +52,6 @@ function isEmptyResponse(res) {
     const parsed = JSON.parse(res.text);
     if (!parsed || parsed.length === 0) return true;
   } catch {
-    // if it’s not valid JSON, treat as empty/useless
     return true;
   }
 
@@ -61,11 +59,11 @@ function isEmptyResponse(res) {
 }
 
 async function main() {
-  const station = process.argv[2] || "S00217"; // default: Torino Porta Nuova
+  const station = process.argv[2] || "S00217"; // Torino Porta Nuova
 
-  const today = italyDate(0);
-  const tomorrow = italyDate(1);
-  const yesterday = italyDate(-1);
+  const today = italyDateString(0);
+  const tomorrow = italyDateString(1);
+  const yesterday = italyDateString(-1);
 
   const attempts = [
     { label: "today", date: today },
@@ -86,16 +84,17 @@ async function main() {
     if (res.error) console.log("ERROR:", res.error);
 
     if (!isEmptyResponse(res)) {
-        try {
-            res.json = JSON.parse(res.text);
-        } catch {
-            res.json = null;
-        }
+      try {
+        res.json = JSON.parse(res.text);
+      } catch {
+        res.json = null;
+      }
 
-        final = { ...res, used: attempt.label };
-        break;
+      final = { ...res, used: attempt.label };
+      break;
     }
-}
+  }
+
   if (!final) {
     final = {
       used: "none",
