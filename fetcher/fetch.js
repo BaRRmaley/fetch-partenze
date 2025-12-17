@@ -115,8 +115,8 @@ async function main() {
     json: final.json
   };
 
-  fs.writeFileSync("torino-partenze.json", JSON.stringify(output, null, 2));
-  console.log("Wrote torino-partenze.json");
+  fs.writeFileSync("ivrea-partenze.json", JSON.stringify(output, null, 2));
+  console.log("Wrote ivrea-partenze.json");
 }
 
 main();
