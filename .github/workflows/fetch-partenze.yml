@@ -21,7 +21,7 @@ jobs:
         working-directory: ./fetcher
 
       - name: Run fetcher
-        run: node fetcher/fetch.js S00142
+        run: node fetcher/fetch.js S00154
         env:
           TZ: Europe/Rome
 
