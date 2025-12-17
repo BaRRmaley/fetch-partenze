@@ -61,7 +61,7 @@ function isEmptyResponse(res) {
 }
 
 async function main() {
-  const station = process.argv[2] || "S00219"; // default: Torino Lingotto
+  const station = process.argv[2] || "S00217"; // default: Torino Porta Nuova
 
   const today = italyDate(0);
   const tomorrow = italyDate(1);
