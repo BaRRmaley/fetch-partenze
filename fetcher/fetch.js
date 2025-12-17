@@ -1,10 +1,12 @@
-import fs from "fs";
-import fetch from "node-fetch";
+const fs = require("fs");
+const fetch = require("node-fetch");
 
 // Compute YYYYMMDD in Italy timezone
 function italyDate(offsetDays = 0) {
   const now = new Date();
-  const italy = new Date(now.toLocaleString("en-US", { timeZone: "Europe/Rome" }));
+  const italy = new Date(
+    now.toLocaleString("en-US", { timeZone: "Europe/Rome" })
+  );
   italy.setDate(italy.getDate() + offsetDays);
 
   const y = italy.getFullYear();
@@ -52,6 +54,7 @@ function isEmptyResponse(res) {
     const parsed = JSON.parse(res.text);
     if (!parsed || parsed.length === 0) return true;
   } catch {
+    // if it’s not valid JSON, treat as empty/useless
     return true;
   }
 
