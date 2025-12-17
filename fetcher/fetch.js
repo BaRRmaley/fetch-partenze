@@ -76,20 +76,26 @@ async function main() {
   let final = null;
 
   for (const attempt of attempts) {
+    console.log("TRYING:", attempt.label, attempt.date);
+
     const res = await fetchDepartures(station, attempt.date);
 
+    console.log("FETCHING:", res.url);
+    console.log("STATUS:", res.status);
+    console.log("RAW SAMPLE:", res.text ? res.text.slice(0, 200) : "<empty>");
+    if (res.error) console.log("ERROR:", res.error);
+
     if (!isEmptyResponse(res)) {
-      try {
-        res.json = JSON.parse(res.text);
-      } catch {
-        res.json = null;
-      }
+        try {
+            res.json = JSON.parse(res.text);
+        } catch {
+            res.json = null;
+        }
 
-      final = { ...res, used: attempt.label };
-      break;
+        final = { ...res, used: attempt.label };
+        break;
     }
-  }
-
+}
   if (!final) {
     final = {
       used: "none",
