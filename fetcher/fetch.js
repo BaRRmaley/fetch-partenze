@@ -59,7 +59,7 @@ function isEmptyResponse(res) {
 }
 
 async function main() {
-  const station = process.argv[2] || "S00142"; // Chatillon
+  const station = process.argv[2] || "S00154"; // Chatillon
 
   const today = italyDateString(0);
   const tomorrow = italyDateString(1);
