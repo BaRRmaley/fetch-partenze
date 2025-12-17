@@ -1,6 +1,8 @@
 {
-  "name": "viaggiatreno-actions",
+  "name": "fetch-partenze",
   "version": "1.0.0",
-  "private": true,
-  "workspaces": ["fetcher"]
+  "type": "module",
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
 }
