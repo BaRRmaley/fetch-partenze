@@ -6,6 +6,10 @@ function italyDateString(offsetDays = 0) {
   const italy = new Date(now.toLocaleString("en-US", { timeZone: "Europe/Rome" }));
   italy.setDate(italy.getDate() + offsetDays);
 
+  // Request "now + 15 minutes" to stay inside ViaggiaTreno's valid window
+  italy.setMinutes(italy.getMinutes() + 15);
+  italy.setSeconds(0, 0);
+
   // ViaggiaTreno accepts the JS Date string WITHOUT the timezone name in parentheses
   return italy.toString().replace(/\s*\(.*\)$/, "");
 }
